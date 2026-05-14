@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "85251160050",
+    "project_id": "cassava-1fae6",
+    "storage_bucket": "cassava-1fae6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:85251160050:android:9b23809695829ad0b5dd6b",
+        "android_client_info": {
+          "package_name": "com.cassavaguard.cassava_guard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1_LYp0bCqTbZWkEgwUmCp_cAGzixrl0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
