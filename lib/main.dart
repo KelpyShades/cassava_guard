@@ -12,28 +12,9 @@ import 'theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-    final startLoggedIn = FirebaseAuth.instance.currentUser != null;
-    runApp(CassavaGuardApp(startLoggedIn: startLoggedIn));
-  } catch (e, stackTrace) {
-    runApp(
-      MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                'Initialization Error:\n$e\n\n$stackTrace',
-                style: const TextStyle(color: Colors.red),
-                textDirection: TextDirection.ltr,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final startLoggedIn = FirebaseAuth.instance.currentUser != null;
+  runApp(CassavaGuardApp(startLoggedIn: startLoggedIn));
 }
 
 class CassavaGuardApp extends StatelessWidget {

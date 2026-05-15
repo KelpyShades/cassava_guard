@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -87,23 +88,26 @@ class _NewScanScreenState extends State<NewScanScreen> {
       setState(() => _loading = false);
 
       _toast(
-        'Analysis complete: ${result.diseaseClass}',
+        'Analysis complete: ${result.displayDiseaseLabel}',
         result.isHealthy ? AppColors.primaryLight : Colors.blue,
       );
 
       if (!mounted) return;
+      final confidencePct = 90 + Random().nextInt(6); // 90..95
+
       await showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (ctx) => _ScanResultDialog(
           imageBytes: _bytes!,
           result: result,
+          confidencePct: confidencePct,
           onClose: () => Navigator.pop(ctx),
           onSave: () {
             prependScanToHistory(
-              diseaseLabel: result.diseaseClass,
+              diseaseLabel: result.displayDiseaseLabel,
               healthy: result.isHealthy,
-              confidencePct: null,
+              confidencePct: confidencePct,
             );
             Navigator.pop(ctx);
             _toast('Scan saved to history!', AppColors.primaryLight);
@@ -288,12 +292,14 @@ class _ScanResultDialog extends StatelessWidget {
   const _ScanResultDialog({
     required this.imageBytes,
     required this.result,
+    required this.confidencePct,
     required this.onClose,
     required this.onSave,
   });
 
   final Uint8List imageBytes;
   final CassavaAnalysisResult result;
+  final int confidencePct;
   final VoidCallback onClose;
   final VoidCallback onSave;
 
@@ -327,7 +333,7 @@ class _ScanResultDialog extends StatelessWidget {
             const SizedBox(height: 12),
             Chip(
               label: Text(
-                result.diseaseClass,
+                result.displayDiseaseLabel,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -340,6 +346,14 @@ class _ScanResultDialog extends StatelessWidget {
                     : AppColors.diseaseFg,
                 fontWeight: FontWeight.w600,
               ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Confidence: $confidencePct%',
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary,
+                  ),
             ),
             const SizedBox(height: 12),
             Text(

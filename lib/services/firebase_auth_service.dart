@@ -61,10 +61,12 @@ abstract final class FirebaseAuthService {
   }
 
   static Future<void> signOut() async {
-    await Future.wait<void>([
-      _auth.signOut(),
-      _google.signOut(),
-    ]);
+    try {
+      await _google.signOut();
+    } catch (_) {
+      // Ignore errors if Google sign-in wasn't used
+    }
+    await _auth.signOut();
   }
 
   static String userDisplayLabel(User? user) {

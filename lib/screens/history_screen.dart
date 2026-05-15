@@ -114,8 +114,8 @@ class HistoryScreen extends StatelessWidget {
                                   DataColumn(label: Text('Image')),
                                   DataColumn(label: Text('Disease')),
                                   DataColumn(label: Text('Confidence')),
-                                  DataColumn(label: Text('Status')),
-                                  DataColumn(label: Text('Action')),
+                                  DataColumn(label: Text('Outcome')),
+
                                 ],
                                 rows: [
                                   for (final r in rows)
@@ -146,12 +146,8 @@ class HistoryScreen extends StatelessWidget {
                                                 ),
                                           ),
                                         ),
-                                        DataCell(_StatusLabel(pending: r.pending)),
                                         DataCell(
-                                          OutlinedButton(
-                                            onPressed: () {},
-                                            child: const Text('View'),
-                                          ),
+                                          _ScanOutcomeLabel(healthy: r.healthy),
                                         ),
                                       ],
                                     ),
@@ -252,15 +248,15 @@ class _DiseaseChip extends StatelessWidget {
   }
 }
 
-class _StatusLabel extends StatelessWidget {
-  const _StatusLabel({required this.pending});
+class _ScanOutcomeLabel extends StatelessWidget {
+  const _ScanOutcomeLabel({required this.healthy});
 
-  final bool pending;
+  final bool healthy;
 
   @override
   Widget build(BuildContext context) {
-    final color = pending ? Colors.orange : AppColors.primaryLight;
-    final text = pending ? 'Pending' : 'Completed';
+    final color = healthy ? AppColors.primaryLight : AppColors.diseaseFg;
+    final text = healthy ? 'Healthy' : 'Issue flagged';
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [

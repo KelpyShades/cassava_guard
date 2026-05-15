@@ -54,15 +54,49 @@ abstract final class CassavaApiService {
 
     if (response.statusCode == 200) {
       final json = jsonDecode(body) as Map<String, dynamic>;
-      final disease = json['disease_class'] as String? ??
-          json['pest'] as String? ??
-          'Unknown';
-      final analysis = json['analysis'] as String? ?? '';
-      final suggestions = json['suggestions'] as String? ?? '';
+      final payload = json['result'] is Map<String, dynamic>
+          ? json['result'] as Map<String, dynamic>
+          : json;
+
+      String? readString(Map<String, dynamic> map, List<String> keys) {
+        for (final key in keys) {
+          final value = map[key];
+          if (value is String && value.trim().isNotEmpty) {
+            return value.trim();
+          }
+        }
+        return null;
+      }
+
+      final disease = readString(payload, [
+            'disease_class',
+            'disease',
+            'predicted_class',
+            'class',
+            'class_name',
+            'label',
+            'pest',
+          ]) ??
+          '';
+      final analysis = readString(payload, [
+            'analysis',
+            'result',
+            'diagnosis',
+            'description',
+          ]) ??
+          '';
+      final suggestions = readString(payload, [
+            'suggestions',
+            'recommendation',
+            'recommendations',
+            'advice',
+          ]) ??
+          '';
+
       return CassavaAnalysisResult(
-        diseaseClass: disease.trim(),
-        analysis: analysis.trim(),
-        suggestions: suggestions.trim(),
+        diseaseClass: disease,
+        analysis: analysis,
+        suggestions: suggestions,
       );
     }
 
