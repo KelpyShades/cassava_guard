@@ -115,7 +115,7 @@ class HistoryScreen extends StatelessWidget {
                                   DataColumn(label: Text('Disease')),
                                   DataColumn(label: Text('Confidence')),
                                   DataColumn(label: Text('Status')),
-
+                                  DataColumn(label: Text('Action')),
                                 ],
                                 rows: [
                                   for (final r in rows)
@@ -147,6 +147,12 @@ class HistoryScreen extends StatelessWidget {
                                           ),
                                         ),
                                         DataCell(_StatusLabel(pending: r.pending)),
+                                        DataCell(
+                                          OutlinedButton(
+                                            onPressed: () {},
+                                            child: const Text('View'),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                 ],

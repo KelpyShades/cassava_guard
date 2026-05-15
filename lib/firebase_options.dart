@@ -12,7 +12,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError('Configure web with flutterfire configure.');
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -23,15 +23,6 @@ class DefaultFirebaseOptions {
         throw UnsupportedError('Platform not configured.');
     }
   }
-
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC1_LYp0bCqTbZWkEgwUmCp_cAGzixrl0I',
-    appId: '1:85251160050:web:ffffffffffffffffffffffff',
-    messagingSenderId: '85251160050',
-    projectId: 'cassava-1fae6',
-    authDomain: 'cassava-1fae6.firebaseapp.com',
-    storageBucket: 'cassava-1fae6.firebasestorage.app',
-  );
 
   /// Matches google-services.json (mobilesdk_app_id, api_key, project_info).
   static const FirebaseOptions android = FirebaseOptions(

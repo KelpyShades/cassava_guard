@@ -140,15 +140,9 @@ class _Sidebar extends StatelessWidget {
   }
 
   Future<void> _confirmLogout(BuildContext context) async {
-    final nav = Navigator.of(context, rootNavigator: true);
-    final scaffold = ScaffoldMessenger.of(context);
-    
-    if (isDrawer) {
-      nav.pop();
-    }
-
+    if (isDrawer) Navigator.pop(context);
     final ok = await showDialog<bool>(
-      context: nav.context,
+      context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Logout'),
         content: const Text('Are you sure you want to logout?'),
@@ -164,13 +158,15 @@ class _Sidebar extends StatelessWidget {
         ],
       ),
     );
-
-    if (ok == true) {
-      scaffold.showSnackBar(
+    if (ok == true && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Logging out...')),
       );
       await FirebaseAuthService.signOut();
-      nav.pushNamedAndRemoveUntil('/login', (r) => false);
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      if (context.mounted) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (r) => false);
+      }
     }
   }
 }

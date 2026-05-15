@@ -95,29 +95,29 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // Future<void> _google() async {
-  //   setState(() => _busy = true);
-  //   try {
-  //     final cred = await FirebaseAuthService.signInWithGoogle();
-  //     if (!mounted) return;
-  //     if (cred == null) {
-  //       _toast('Google sign-in cancelled', color: Colors.orange);
-  //       return;
-  //     }
-  //     _toast('Signed in with Google', color: AppColors.primaryLight);
-  //     await _goDashboard();
-  //   } on FirebaseAuthException catch (e) {
-  //     if (mounted) {
-  //       _toast(_authErrorMessage(e), color: Colors.red.shade700);
-  //     }
-  //   } catch (e) {
-  //     if (mounted) {
-  //       _toast('Google sign-in failed: $e', color: Colors.red.shade700);
-  //     }
-  //   } finally {
-  //     if (mounted) setState(() => _busy = false);
-  //   }
-  // }
+  Future<void> _google() async {
+    setState(() => _busy = true);
+    try {
+      final cred = await FirebaseAuthService.signInWithGoogle();
+      if (!mounted) return;
+      if (cred == null) {
+        _toast('Google sign-in cancelled', color: Colors.orange);
+        return;
+      }
+      _toast('Signed in with Google', color: AppColors.primaryLight);
+      await _goDashboard();
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        _toast(_authErrorMessage(e), color: Colors.red.shade700);
+      }
+    } catch (e) {
+      if (mounted) {
+        _toast('Google sign-in failed: $e', color: Colors.red.shade700);
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   Future<void> _forgotPassword() async {
     final email = _email.text.trim();
@@ -257,7 +257,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             label: const Text('Create a new account'),
                           ),
                         ),
-
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Divider(),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton.icon(
+                            onPressed: _busy ? null : _google,
+                            icon: const Icon(Icons.g_mobiledata, size: 28),
+                            label: const Text('Sign in with Google'),
+                          ),
+                        ),
                         TextButton(
                           onPressed: _busy ? null : _forgotPassword,
                           child: const Text('Forgot password?'),

@@ -107,29 +107,29 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
   }
 
-  // Future<void> _google() async {
-  //   setState(() => _busy = true);
-  //   try {
-  //     final cred = await FirebaseAuthService.signInWithGoogle();
-  //     if (!mounted) return;
-  //     if (cred == null) {
-  //       _toast('Google sign-in cancelled', color: Colors.orange);
-  //       return;
-  //     }
-  //     _toast('Signed in with Google', color: AppColors.primaryLight);
-  //     Navigator.pushReplacementNamed(context, '/dashboard');
-  //   } on FirebaseAuthException catch (e) {
-  //     if (mounted) {
-  //       _toast(_authErrorMessage(e), color: Colors.red.shade700);
-  //     }
-  //   } catch (e) {
-  //     if (mounted) {
-  //       _toast('Google sign-in failed: $e', color: Colors.red.shade700);
-  //     }
-  //   } finally {
-  //     if (mounted) setState(() => _busy = false);
-  //   }
-  // }
+  Future<void> _google() async {
+    setState(() => _busy = true);
+    try {
+      final cred = await FirebaseAuthService.signInWithGoogle();
+      if (!mounted) return;
+      if (cred == null) {
+        _toast('Google sign-in cancelled', color: Colors.orange);
+        return;
+      }
+      _toast('Signed in with Google', color: AppColors.primaryLight);
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        _toast(_authErrorMessage(e), color: Colors.red.shade700);
+      }
+    } catch (e) {
+      if (mounted) {
+        _toast('Google sign-in failed: $e', color: Colors.red.shade700);
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +259,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                               backgroundColor: AppColors.primary,
                             ),
                           ),
-
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Divider(),
+                          ),
+                          OutlinedButton.icon(
+                            onPressed: _busy ? null : _google,
+                            icon: const Icon(Icons.g_mobiledata, size: 28),
+                            label: const Text('Continue with Google'),
+                          ),
                           const SizedBox(height: 8),
                           TextButton(
                             onPressed:
